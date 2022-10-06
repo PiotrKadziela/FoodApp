@@ -15,6 +15,7 @@ import com.example.foodapp.fragments.HomeFragment
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.viewModel.MealViewModel
 
+@Suppress("DEPRECATION")
 class MealActivity : AppCompatActivity() {
     private lateinit var mealId: String
     private lateinit var mealName: String
@@ -51,9 +52,7 @@ class MealActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun observeMealDetailsLiveData() {
-        mealMvvm.observerMealDetailsLiveData().observe(
-            this
-        ) { meal ->
+        mealMvvm.observerMealDetailsLiveData().observe(this) { meal ->
             onResponseCase()
             binding.tvCategory.text = "Category : ${meal!!.strCategory}"
             binding.tvArea.text = "Area : ${meal.strArea}"
