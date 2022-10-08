@@ -6,14 +6,17 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.foodapp.R
 import com.example.foodapp.databinding.ActivityMealBinding
+import com.example.foodapp.db.MealDB
 import com.example.foodapp.fragments.HomeFragment
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.viewModel.MealViewModel
+import com.example.foodapp.viewModel.MealViewModelFactory
 
 @Suppress("DEPRECATION")
 class MealActivity : AppCompatActivity() {
@@ -23,6 +26,7 @@ class MealActivity : AppCompatActivity() {
     private lateinit var youtubeLink: String
     private lateinit var binding: ActivityMealBinding
     private lateinit var mealMvvm: MealViewModel
+    private var meal: Meal? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +34,9 @@ class MealActivity : AppCompatActivity() {
         binding = ActivityMealBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mealMvvm = ViewModelProvider(this)[MealViewModel::class.java]
+        val mealDB = MealDB.getInstance(this)
+        val viewModelFactory = MealViewModelFactory(mealDB)
+        mealMvvm = ViewModelProvider(this, viewModelFactory)[MealViewModel::class.java]
 
         getMealInformationFromIntent()
 
@@ -41,6 +47,16 @@ class MealActivity : AppCompatActivity() {
         observeMealDetailsLiveData()
 
         onYoutubeImageClick()
+        onFavoriteClick()
+    }
+
+    private fun onFavoriteClick() {
+        binding.btnAddToFav.setOnClickListener {
+            meal?.let {
+                mealMvvm.insertMeal(it)
+                Toast.makeText(this, "Meal saved", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun onYoutubeImageClick() {
@@ -53,6 +69,7 @@ class MealActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun observeMealDetailsLiveData() {
         mealMvvm.observerMealDetailsLiveData().observe(this) { meal ->
+            this.meal = meal
             onResponseCase()
             binding.tvCategory.text = "Category : ${meal!!.strCategory}"
             binding.tvArea.text = "Area : ${meal.strArea}"
