@@ -14,4 +14,7 @@ interface MealDao {
 
     @Query("SELECT * FROM mealInformation")
     fun getAll(): LiveData<List<Meal>>
+
+    @Query("SELECT * FROM mealInformation WHERE idMeal = :id")
+    fun get(id: String): List<Meal>
 }

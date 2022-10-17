@@ -1,6 +1,7 @@
 package com.example.foodapp.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -30,6 +31,20 @@ class CategoryActivity : AppCompatActivity() {
         categoryViewModel.observeMealsLiveData().observe(this) { mealList ->
             binding.tvCategoryCount.text = "$categoryName : ${mealList.size}"
             categoryMealAdapter.setMealList(mealList)
+        }
+
+        onMealClick()
+    }
+
+    private fun onMealClick() {
+        categoryMealAdapter.onItemClick = { meal ->
+            val intent = Intent(this, MealActivity::class.java)
+            intent.apply {
+                putExtra(HomeFragment.MEAL_NAME, meal.strMeal)
+                putExtra(HomeFragment.MEAL_ID, meal.idMeal)
+                putExtra(HomeFragment.MEAL_THUMB, meal.strMealThumb)
+            }
+            startActivity(intent)
         }
     }
 

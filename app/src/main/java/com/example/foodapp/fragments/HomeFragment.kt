@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var randomMeal: Meal
     private lateinit var popularItemsAdapter: MostPopularAdapter
-    private lateinit var categoriesAdapter: CategoryAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
 
     companion object {
         const val MEAL_ID = "com.example.foodapp.fragments.idMeal"
@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
         popularItemsAdapter = MostPopularAdapter()
-        categoriesAdapter = CategoryAdapter()
+        categoryAdapter = CategoryAdapter()
     }
 
     override fun onCreateView(
@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun onCategoryClick() {
-        categoriesAdapter.onItemClick = { category ->
+        categoryAdapter.onItemClick = { category ->
             val intent = Intent(activity, CategoryActivity::class.java)
             intent.putExtra(CATEGORY_NAME, category.strCategory)
             startActivity(intent)
@@ -98,13 +98,13 @@ class HomeFragment : Fragment() {
     private fun prepareCategoriesRecyclerView() {
         binding.recViewCategories.apply {
             layoutManager = GridLayoutManager(activity, 3, GridLayoutManager.VERTICAL, false)
-            adapter = categoriesAdapter
+            adapter = categoryAdapter
         }
     }
 
     private fun observeCategoriesLiveData() {
         viewModel.observeCategoriesLiveData().observe(viewLifecycleOwner) { categories ->
-            categoriesAdapter.setCategoryList(categories)
+            categoryAdapter.setCategoryList(categories)
         }
     }
 

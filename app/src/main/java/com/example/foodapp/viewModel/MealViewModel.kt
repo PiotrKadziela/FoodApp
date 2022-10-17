@@ -43,4 +43,8 @@ class MealViewModel(val mealDB: MealDB): ViewModel() {
             mealDB.mealDao().update(meal)
         }
     }
+
+    fun isFavorite(id: String): Boolean {
+        return mealDB.mealDao().get(id).isNotEmpty()
+    }
 }

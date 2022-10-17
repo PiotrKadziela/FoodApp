@@ -2,6 +2,7 @@ package com.example.foodapp.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -71,7 +72,9 @@ class MealActivity : AppCompatActivity() {
         mealMvvm.observerMealDetailsLiveData().observe(this) { meal ->
             this.meal = meal
             onResponseCase()
-            binding.tvCategory.text = "Category : ${meal!!.strCategory}"
+
+            binding.tvMealName.text = meal!!.strMeal
+            binding.tvCategory.text = "Category : ${meal.strCategory}"
             binding.tvArea.text = "Area : ${meal.strArea}"
             binding.tvInstructionsSteps.text = meal.strInstructions
 
@@ -83,10 +86,6 @@ class MealActivity : AppCompatActivity() {
         Glide.with(applicationContext)
             .load(mealThumb)
             .into(binding.imgMealDetail)
-
-        binding.collapsingToolbar.title = mealName
-        binding.collapsingToolbar.setCollapsedTitleTextColor(resources.getColor(R.color.white))
-        binding.collapsingToolbar.setExpandedTitleColor(resources.getColor(R.color.white))
     }
 
     private fun getMealInformationFromIntent() {

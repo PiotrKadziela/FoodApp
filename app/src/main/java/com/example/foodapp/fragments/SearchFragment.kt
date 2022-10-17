@@ -1,16 +1,16 @@
 package com.example.foodapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.activities.MainActivity
+import com.example.foodapp.activities.MealActivity
 import com.example.foodapp.adapters.MealsAdapter
 import com.example.foodapp.databinding.FragmentSearchBinding
 import com.example.foodapp.viewModel.HomeViewModel
@@ -57,6 +57,20 @@ class SearchFragment : Fragment() {
                 delay(500)
                 viewModel.searchMeals(searchQuery.toString())
             }
+        }
+
+        onMealClick()
+    }
+
+    private fun onMealClick() {
+        searchRecyclerViewAdapter.onItemClick = { meal ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.apply {
+                putExtra(HomeFragment.MEAL_NAME, meal.strMeal)
+                putExtra(HomeFragment.MEAL_ID, meal.idMeal)
+                putExtra(HomeFragment.MEAL_THUMB, meal.strMealThumb)
+            }
+            startActivity(intent)
         }
     }
 

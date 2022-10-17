@@ -1,6 +1,7 @@
 package com.example.foodapp.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.activities.MainActivity
+import com.example.foodapp.activities.MealActivity
 import com.example.foodapp.adapters.MealsAdapter
 import com.example.foodapp.databinding.FragmentFavoritesBinding
+import com.example.foodapp.fragments.bottomsheet.MealBottomSheetFragment
 import com.example.foodapp.viewModel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -66,6 +69,28 @@ class FavoritesFragment : Fragment() {
         }
 
         ItemTouchHelper(itemTouchHelper).attachToRecyclerView(binding.rvFavorite)
+
+        onMealClick()
+        onMealLongClick()
+    }
+
+    private fun onMealClick() {
+        favoriteMealsAdapter.onItemClick = { meal ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.apply {
+                putExtra(HomeFragment.MEAL_NAME, meal.strMeal)
+                putExtra(HomeFragment.MEAL_ID, meal.idMeal)
+                putExtra(HomeFragment.MEAL_THUMB, meal.strMealThumb)
+            }
+            startActivity(intent)
+        }
+    }
+
+    private fun onMealLongClick() {
+        favoriteMealsAdapter.onLongItemClick = { meal ->
+            val mealBottomSheetFragment = MealBottomSheetFragment.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager, "Meal Info")
+        }
     }
 
     private fun prepareRecyclerView() {

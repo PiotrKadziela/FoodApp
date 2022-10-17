@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="meal_image_desc">Meal image</string>
     <string name="category_image_desc">Category image</string>
+    <string name="read_more">Read more...</string>
+    <string name="search">Search...</string>
 </resources>

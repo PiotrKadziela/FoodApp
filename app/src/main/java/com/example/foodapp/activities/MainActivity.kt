@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.foodapp.R
 import com.example.foodapp.db.MealDB
@@ -23,8 +24,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.btm_nav)
-        val navController = Navigation.findNavController(this, R.id.host_fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.host_fragment)
+        val navController = navHostFragment?.findNavController()
 
-        NavigationUI.setupWithNavController(bottomNavigation, navController)
+        if (navController != null) {
+            NavigationUI.setupWithNavController(bottomNavigation, navController)
+        }
     }
 }

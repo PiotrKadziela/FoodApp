@@ -11,6 +11,9 @@ import com.example.foodapp.pojo.Meal
 
 class MealsAdapter : RecyclerView.Adapter<MealsAdapter.FavoriteMealsViewHolder>() {
 
+    lateinit var onItemClick: ((Meal) -> Unit)
+    var onLongItemClick: ((Meal) -> Unit)? = null
+
     private val diffUtil= object : DiffUtil.ItemCallback<Meal>() {
         override fun areItemsTheSame(oldItem: Meal, newItem: Meal): Boolean {
             return oldItem.idMeal == newItem.idMeal
@@ -36,6 +39,13 @@ class MealsAdapter : RecyclerView.Adapter<MealsAdapter.FavoriteMealsViewHolder>(
         val meal = differ.currentList[position]
         Glide.with(holder.itemView).load(meal.strMealThumb).into(holder.binding.imgMeal)
         holder.binding.tvMealName.text = meal.strMeal
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(meal)
+        }
+        holder.itemView.setOnLongClickListener {
+            onLongItemClick?.invoke(meal)
+            true
+        }
     }
 
     override fun getItemCount(): Int {
